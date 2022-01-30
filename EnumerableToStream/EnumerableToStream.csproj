@@ -2,12 +2,20 @@
 
     <PropertyGroup>
         <Title>Converts an IEnumerable&lt;string&gt; to a Stream</Title>
-        <Description>using EnumerableToStream; Stream s = new [] {"Hello, ", "world!"}.ToStream(); </Description>
+        <Description>
+using EnumerableToStream;
+            
+var enumerable = new [] {"Hello, ", "world!"};
+            
+Stream s = enumerable.ToStream();
+        </Description>
+        <Version>1.0.1</Version>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
         <Authors>morpher</Authors>
         <Owners>morpher</Owners>
+        <RepositoryUrl>https://github.com/bzaar/EnumerableToStream</RepositoryUrl>
     </PropertyGroup>
 
 </Project>
