@@ -14,7 +14,7 @@ Stream stream = enumerable.ToStream();
 
 * The enumerable is evaluated lazily as the stream is read.
 * The enumerable is properly disposed of when the stream is closed.
-* The stream does zero allocations on .NET Standard 2.1.
+* ToStream() does zero allocations on .NET Standard 2.1 compatible runtimes.
 * ToStream() supports encodings: ```enumerable.ToStream(Encoding.UTF8);```
 
 [nuget]: https://www.nuget.org/packages/EnumerableToStream/
