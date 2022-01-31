@@ -31,11 +31,15 @@ namespace EnumerableToStream
             {
                 string? current = _enumerator.Current;
                 if (current == null || current.Length == 0) continue;
-
+#if SPANS_SUPPORTED
                 _encoder.Convert(current.AsSpan(_currentIndex),  
                     buffer.AsSpan(offset + totalBytesRead, count - totalBytesRead),
                     false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
-
+#else
+                _encoder.Convert(current.ToCharArray(), _currentIndex, current.Length - _currentIndex, 
+                    buffer, offset + totalBytesRead, count - totalBytesRead,
+                    false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
+#endif
                 totalBytesRead += bytesUsed;
                 _currentIndex = (_currentIndex + charsUsed) % current.Length;
             }
