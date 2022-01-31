@@ -29,18 +29,15 @@ namespace EnumerableToStream
 
             while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || _enumerator.MoveNext()))
             {
-                string? s = _enumerator.Current;
-                if (s == null || s.Length == 0) continue;
-                
-                char[] current = s.ToCharArray();
-                
-                _encoder.Convert(current, _currentIndex, current.Length - _currentIndex, 
-                    buffer, offset + totalBytesRead, count - totalBytesRead,
+                string? current = _enumerator.Current;
+                if (current == null || current.Length == 0) continue;
+
+                _encoder.Convert(current.AsSpan(_currentIndex),  
+                    buffer.AsSpan(offset + totalBytesRead, count - totalBytesRead),
                     false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
 
                 totalBytesRead += bytesUsed;
-                _currentIndex += charsUsed;
-                _currentIndex %= current.Length;
+                _currentIndex = (_currentIndex + charsUsed) % current.Length;
             }
 
             return totalBytesRead;
