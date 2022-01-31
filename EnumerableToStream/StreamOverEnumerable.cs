@@ -32,7 +32,8 @@ namespace EnumerableToStream
             bool spaceInBuffer = true;
 
             while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || _enumerator.MoveNext()))
-            {
+            { char[] CurrentBytes = _enumerator.Current!;
+        
                 _encoder.Convert(CurrentBytes, _currentIndex, CurrentBytes.Length - _currentIndex, 
                     buffer, offset + totalBytesRead, count - totalBytesRead,
                     false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
@@ -45,9 +46,7 @@ namespace EnumerableToStream
 
             return totalBytesRead;
         }
-
-        char[] CurrentBytes => _enumerator!.Current!;
-        
+ 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
