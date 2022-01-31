@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace EnumerableToStream
@@ -9,16 +8,13 @@ namespace EnumerableToStream
     internal class StreamOverEnumerable : Stream
     {
         private int _currentIndex;
-        private IEnumerator<char[]>? _enumerator;
+        private IEnumerator<string?>? _enumerator;
         private readonly Encoder _encoder;
 
         public StreamOverEnumerable(IEnumerable<string?> input, Encoder encoder)
         {
             _encoder = encoder;
-            _enumerator = input
-                .Where(s => !string.IsNullOrEmpty(s))
-                .Select(s => s!.ToCharArray())
-                .GetEnumerator();
+            _enumerator = input.GetEnumerator();
         }
 
         public override int Read(byte[] buffer, int offset, int count)
@@ -33,21 +29,23 @@ namespace EnumerableToStream
 
             while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || _enumerator.MoveNext()))
             {
-                _encoder.Convert(CurrentBytes, _currentIndex, CurrentBytes.Length - _currentIndex, 
+                string? s = _enumerator.Current;
+                if (s == null || s.Length == 0) continue;
+                
+                char[] current = s.ToCharArray();
+                
+                _encoder.Convert(current, _currentIndex, current.Length - _currentIndex, 
                     buffer, offset + totalBytesRead, count - totalBytesRead,
                     false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
 
                 totalBytesRead += bytesUsed;
                 _currentIndex += charsUsed;
-
-                if (_currentIndex == CurrentBytes.Length) _currentIndex = 0;
+                _currentIndex %= current.Length;
             }
 
             return totalBytesRead;
         }
 
-        char[] CurrentBytes => _enumerator!.Current!;
-        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
