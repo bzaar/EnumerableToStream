@@ -8,6 +8,9 @@
         <LangVersion>9</LangVersion>
 
         <Nullable>enable</Nullable>
+
+        <RootNamespace>EnumerableToStream</RootNamespace>
+
     </PropertyGroup>
 
     <ItemGroup>

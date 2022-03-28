@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-// ReSharper disable once CheckNamespace
 namespace EnumerableToStream
 {
     [TestFixture]
