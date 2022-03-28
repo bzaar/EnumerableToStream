@@ -27,7 +27,7 @@ Streaming query results to the client in a memory efficient manner:
 public IActionResult Get()
 {
     IEnumerable<string> lines = GetLines();
-    Stream stream = lines.ToStream();
+    Stream stream = lines.AddLineEndings().ToStream();
     return File(stream, "text/csv");
 }
 ```
