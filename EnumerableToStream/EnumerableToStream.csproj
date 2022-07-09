@@ -20,4 +20,8 @@ Stream s = enumerable.ToStream();
         <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.1'">SPANS_SUPPORTED</DefineConstants>
     </PropertyGroup>
 
+    <ItemGroup Condition=" '$(TargetFramework)' != 'net20'">
+        <Compile Remove="ExtensionAttribute.cs" />
+    </ItemGroup>
+
 </Project>
