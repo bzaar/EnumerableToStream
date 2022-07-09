@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/q4c8f61tjwgv7cwu?svg=true)](https://ci.appveyor.com/project/morpher/enumerabletostream)
+
 # EnumerableToStream [Nuget package][nuget]
 
 Converts an ```IEnumerable<string>``` to a ```Stream```:
