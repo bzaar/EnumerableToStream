@@ -18,6 +18,8 @@ Stream s = enumerable.ToStream();
         <PackageReleaseNotes>Support .NET Framework 2.0 &amp; 4.0.</PackageReleaseNotes>
         <RepositoryUrl>https://github.com/bzaar/EnumerableToStream</RepositoryUrl>
         <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard2.1'">SPANS_SUPPORTED</DefineConstants>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' != 'net20'">
