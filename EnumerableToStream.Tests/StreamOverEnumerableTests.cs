@@ -120,7 +120,10 @@ public class StreamOverEnumerableTests
         var buffer = new byte[1];
 
         // Need at least a 2-byte buffer to read the 2-byte char.
-        Assert.Throws<ArgumentException>(() => stream.Read(buffer, 0, 1));
+        Assert.Throws<ArgumentException>(() =>
+        {
+            int _ = stream.Read(buffer, 0, 1);
+        });
     }
 
     [Test]
@@ -133,6 +136,9 @@ public class StreamOverEnumerableTests
 
         var buffer = new byte[1];
 
-        Assert.Throws<ObjectDisposedException>(() => stream.Read(buffer, 0, 1));
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            int _ = stream.Read(buffer, 0, 1);
+        });
     }
 }
