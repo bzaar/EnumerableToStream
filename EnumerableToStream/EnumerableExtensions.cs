@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace EnumerableToStream;
+﻿namespace EnumerableToStream;
 
 public static class EnumerableExtensions
 {

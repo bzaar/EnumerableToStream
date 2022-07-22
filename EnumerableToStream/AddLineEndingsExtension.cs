@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EnumerableToStream;
+﻿namespace EnumerableToStream;
 
 public static class AddLineEndingsExtension
 {

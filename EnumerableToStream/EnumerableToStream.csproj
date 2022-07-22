@@ -26,4 +26,11 @@ Stream s = enumerable.ToStream();
         <Compile Remove="ExtensionAttribute.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="System" />
+        <Using Include="System.Collections.Generic" />
+        <Using Include="System.IO" />
+        <Using Include="System.Text" />
+    </ItemGroup>
+    
 </Project>
