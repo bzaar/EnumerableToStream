@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace EnumerableToStream;
 
 class StreamOverEnumerable : Stream
@@ -46,8 +48,7 @@ class StreamOverEnumerable : Stream
     {
         if (disposing)
         {
-            _enumerator?.Dispose();
-            _enumerator = null;
+            Interlocked.Exchange(ref _enumerator, null)?.Dispose();
         }
         base.Dispose(disposing);
     }

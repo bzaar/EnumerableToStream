@@ -141,4 +141,15 @@ public class StreamOverEnumerableTests
             int _ = stream.Read(buffer, 0, 1);
         });
     }
+
+    [Test]
+    public void OkToDisposeMultipleTimes()
+    {
+        var input = new[] { "" };
+        var buffer = new byte[1];
+        var stream = input.ToStream();
+        int _ = stream.Read(buffer, 0, 1);
+        stream.Dispose();
+        stream.Dispose();
+    }
 }
