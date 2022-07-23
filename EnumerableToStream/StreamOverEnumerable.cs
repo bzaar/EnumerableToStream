@@ -54,24 +54,30 @@ class StreamOverEnumerable : Stream
     }
         
     public override void Flush()
-        => throw new NotImplementedException();
+        => throw WritingNotSupported();
 
     public override long Seek(long offset, SeekOrigin origin)
-        => throw new NotImplementedException();
+        => throw SeekingNotSupported();
 
     public override void SetLength(long value)
-        => throw new NotImplementedException();
+        => throw SeekingNotSupported();
 
     public override void Write(byte[] buffer, int offset, int count) 
-        => throw new NotImplementedException();
+        => throw WritingNotSupported();
 
     public override bool CanRead => true;
     public override bool CanSeek => false;
     public override bool CanWrite => false;
-    public override long Length => throw new NotImplementedException();
+    public override long Length => throw SeekingNotSupported();
     public override long Position
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get => throw SeekingNotSupported();
+        set => throw SeekingNotSupported();
     }
+    
+    private static Exception WritingNotSupported() =>
+        new NotSupportedException("Writing is not supported.");
+
+    private static Exception SeekingNotSupported() =>
+        new NotSupportedException("Seeking is not supported.");
 }
