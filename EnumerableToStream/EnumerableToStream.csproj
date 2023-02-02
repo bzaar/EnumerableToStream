@@ -34,6 +34,11 @@ Stream s = enumerable.ToStream();
         <Compile Remove="ExtensionAttribute.cs" />
     </ItemGroup>
 
+    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.1'">
+        <Compile Remove="StreamOverAsyncEnumerable.cs" />
+        <Compile Remove="AsyncEnumerableExtensions.cs" />
+    </ItemGroup>
+
     <ItemGroup>
         <Using Include="System" />
         <Using Include="System.Collections.Generic" />

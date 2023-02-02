@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace EnumerableToStream;
@@ -10,6 +11,16 @@ namespace EnumerableToStream;
 [TestFixture]
 public class StreamOverEnumerableTests
 {
+    [Test]
+    public async Task AsyncTest()
+    {
+        var stream = Enumerable.Empty<string>().ToStream();
+        
+        byte[] buffer = Array.Empty<byte>();
+
+        Assert.AreEqual(0, await stream.ReadAsync(buffer, 0, 0));
+    }
+
     [Test]
     public void EmptyInput_EmptyStream()
     {
