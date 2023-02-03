@@ -4,13 +4,12 @@ namespace EnumerableToStream;
 
 class StreamOverEnumerable : Stream
 {
-    private int _currentIndex;
     private IEnumerator<string?>? _enumerator;
-    private readonly Encoder _encoder;
+    private readonly Reader _reader;
 
     public StreamOverEnumerable(IEnumerable<string?> input, Encoder encoder)
     {
-        _encoder = encoder;
+        _reader = new Reader(encoder);
         _enumerator = input.GetEnumerator();
     }
 
@@ -21,27 +20,14 @@ class StreamOverEnumerable : Stream
             throw new ObjectDisposedException($"The {nameof(StreamOverEnumerable)} has been disposed.");
         }
 
-        int totalBytesRead = 0;
-        bool spaceInBuffer = true;
-
-        while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || _enumerator.MoveNext()))
+        var session = new ReadingSession(buffer, offset, count, _reader);
+        
+        while (session.HasSpaceInBuffer && (session.CurrentHasMore || _enumerator.MoveNext()))
         {
-            string? current = _enumerator.Current;
-            if (current == null || current.Length == 0) continue;
-#if SPANS_SUPPORTED
-            _encoder.Convert(current.AsSpan(_currentIndex),  
-                buffer.AsSpan(offset + totalBytesRead, count - totalBytesRead),
-                false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
-#else
-            _encoder.Convert(current.ToCharArray(), _currentIndex, current.Length - _currentIndex, 
-                buffer, offset + totalBytesRead, count - totalBytesRead,
-                false, out int charsUsed, out int bytesUsed, out spaceInBuffer);
-#endif
-            totalBytesRead += bytesUsed;
-            _currentIndex = (_currentIndex + charsUsed) % current.Length;
+            session.Convert(_enumerator.Current);
         }
 
-        return totalBytesRead;
+        return session.TotalBytesRead;
     }
 
     protected override void Dispose(bool disposing)

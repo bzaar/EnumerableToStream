@@ -6,14 +6,14 @@ namespace EnumerableToStream;
 
 class StreamOverAsyncEnumerable : Stream
 {
-    private int _currentIndex;
     private IAsyncEnumerable<string?>? _enumerable;
     private IAsyncEnumerator<string?>? _enumerator;
-    private readonly Encoder _encoder;
+
+    private readonly Reader _reader;
 
     public StreamOverAsyncEnumerable(IAsyncEnumerable<string?> input, Encoder encoder)
     {
-        _encoder = encoder;
+        _reader = new Reader(encoder);
         _enumerable = input;
         _enumerator = null;
     }
@@ -22,17 +22,15 @@ class StreamOverAsyncEnumerable : Stream
     {
         _enumerator ??= _enumerable?.GetAsyncEnumerator(cancellationToken) 
             ?? throw new ObjectDisposedException($"The {nameof(StreamOverAsyncEnumerable)} has been disposed.");
-        
-        int totalBytesRead = 0;
-        bool spaceInBuffer = true;
 
-        while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || await _enumerator.MoveNextAsync(cancellationToken)))
+        var session = new ReadingSession(buffer, offset, count, _reader);
+        
+        while (session.HasSpaceInBuffer && (session.CurrentHasMore || await _enumerator.MoveNextAsync()))
         {
-            _encoder.Convert(_enumerator.Current, buffer, offset, count,
-                ref _currentIndex, ref totalBytesRead, ref spaceInBuffer);
+            session.Convert(_enumerator.Current);
         }
 
-        return totalBytesRead;
+        return session.TotalBytesRead;
     }
 
     public override async ValueTask DisposeAsync()

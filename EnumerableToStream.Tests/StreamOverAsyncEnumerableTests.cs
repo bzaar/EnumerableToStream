@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -166,5 +167,51 @@ public class StreamOverAsyncEnumerableTests
         int _ = await stream.ReadAsync(buffer, 0, 1);
         await stream.DisposeAsync();
         await stream.DisposeAsync();
+    }
+
+    [Test]
+    public async Task CanBeCancelledUsingExternalToken()
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var input = new[] { "A" };
+        var buffer = new byte[1];
+        var ct = cancellationTokenSource.Token;
+        var stream = input.AsAsyncEnumerable(ct).ToStream();
+        bool thrown = false;
+        
+        try
+        {
+            int bytesRead = await stream.ReadAsync(buffer, 0, 1, default);
+            Assert.AreEqual(0, bytesRead);
+        }
+        catch (OperationCanceledException)
+        {
+            thrown = true;
+        }
+        Assert.IsTrue(thrown);
+    }
+
+    [Test]
+    public async Task CanBeCancelledUsingTokenPassedIn()
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var input = new[] { "A" };
+        var buffer = new byte[1];
+        var ct = cancellationTokenSource.Token;
+        var stream = input.ToStream();
+        bool thrown = false;
+        
+        try
+        {
+            int bytesRead = await stream.ReadAsync(buffer, 0, 1, ct);
+            Assert.AreEqual(0, bytesRead);
+        }
+        catch (OperationCanceledException)
+        {
+            thrown = true;
+        }
+        Assert.IsTrue(thrown);
     }
 }
