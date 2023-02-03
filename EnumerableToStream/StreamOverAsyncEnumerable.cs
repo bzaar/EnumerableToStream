@@ -26,7 +26,7 @@ class StreamOverAsyncEnumerable : Stream
         int totalBytesRead = 0;
         bool spaceInBuffer = true;
 
-        while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || await _enumerator.MoveNextAsync()))
+        while (spaceInBuffer && totalBytesRead < count && (_currentIndex != 0 || await _enumerator.MoveNextAsync(cancellationToken)))
         {
             _encoder.Convert(_enumerator.Current, buffer, offset, count,
                 ref _currentIndex, ref totalBytesRead, ref spaceInBuffer);
