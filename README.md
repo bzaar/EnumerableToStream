@@ -18,6 +18,7 @@ Stream stream = enumerable.ToStream();
 * The enumerable is properly disposed of when the stream is closed.
 * ToStream() does zero allocations on .NET Standard 2.1 compatible runtimes.
 * ToStream() supports encodings: ```enumerable.ToStream(Encoding.UTF8);```
+* IAsyncEnumerable support (since Feb 2023)
 
 [nuget]: https://www.nuget.org/packages/EnumerableToStream/
 
