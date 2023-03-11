@@ -43,6 +43,9 @@ Stream s = enumerable.ToStream();
         <Using Include="System" />
         <Using Include="System.Collections.Generic" />
         <Using Include="System.IO" />
+        <Using Condition=" '$(TargetFramework)' != 'net20' " Include="System.Linq" />
+        <Using Condition=" '$(TargetFramework)' != 'net20' " Include="System.Threading" />
+        <Using Condition=" '$(TargetFramework)' != 'net20' " Include="System.Threading.Tasks" />
         <Using Include="System.Text" />
     </ItemGroup>
 

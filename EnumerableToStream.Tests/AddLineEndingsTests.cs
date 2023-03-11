@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
-
-namespace EnumerableToStream;
+﻿namespace EnumerableToStream;
 
 [TestFixture]
 public class AddLineEndingsTests

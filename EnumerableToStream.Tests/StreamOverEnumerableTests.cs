@@ -1,26 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-
 namespace EnumerableToStream;
 
 [TestFixture]
 public class StreamOverEnumerableTests
 {
-    [Test]
-    public async Task AsyncTest()
-    {
-        var stream = Enumerable.Empty<string>().ToStream();
-        
-        byte[] buffer = Array.Empty<byte>();
-
-        Assert.AreEqual(0, await stream.ReadAsync(buffer, 0, 0));
-    }
-
     [Test]
     public void EmptyInput_EmptyStream()
     {
@@ -49,6 +31,25 @@ public class StreamOverEnumerableTests
         using var reader = new StreamReader(stream);
             
         Assert.AreEqual(string.Join("", input), reader.ReadToEnd());
+    }
+
+    [Test]
+    // Make sure ReadAsync works too.
+    public async Task AsyncTest()
+    {
+        var stream = new [] {"Hello"}.ToStream();
+        var actual = await new StreamReader(stream).ReadToEndAsync();
+        Assert.AreEqual("Hello", actual);
+    }
+
+    [Test]
+    // Make sure the ReadAsync overload taking Memory works too.
+    public async Task ReadAsyncAsMemory()
+    {
+        var stream = new [] {"Hello"}.ToStream();
+        var buffer = new byte[5];
+        int bytesRead = await stream.ReadAsync(buffer.AsMemory(0, 5));
+        Assert.AreEqual(5, bytesRead);
     }
 
     class Disposable : IDisposable

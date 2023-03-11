@@ -1,13 +1,12 @@
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EnumerableToStream;
 
 static class EnumerableExtensions
 {
-    public static async IAsyncEnumerable<T> AsAsyncEnumerable<T>(this IEnumerable<T> seq, [EnumeratorCancellation] CancellationToken ct = default)
+    public static async IAsyncEnumerable<T> AsAsyncEnumerable<T>(
+        this IEnumerable<T> seq, 
+        [EnumeratorCancellation] CancellationToken ct = default)
     {
         foreach (var item in seq)
         {
