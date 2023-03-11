@@ -29,4 +29,10 @@ abstract class ReadOnlyStream : Stream
 
     private static Exception SeekingNotSupported() =>
         new NotSupportedException("Seeking is not supported.");
+    
+    protected Exception NewObjectDisposedException()
+    {
+        string message = $"The {GetType().Name} has been disposed.";
+        return new ObjectDisposedException(message);
+    }
 }

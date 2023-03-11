@@ -13,16 +13,13 @@ class StreamOverEnumerable : StreamOverEnumerableBase
 
     public override int Read(byte[] buffer, int offset, int count)
     {
-        if (_enumerator == null)
-        {
-            throw new ObjectDisposedException($"The {nameof(StreamOverEnumerable)} has been disposed.");
-        }
+        var enumerator = _enumerator ?? throw NewObjectDisposedException();
 
         var session = new ReadingSession(buffer, offset, count, this);
         
-        while (session.HasSpaceInBuffer && (CurrentHasMore || _enumerator.MoveNext()))
+        while (session.HasSpaceInBuffer && (CurrentHasMore || enumerator.MoveNext()))
         {
-            session.Convert(_enumerator.Current);
+            session.Convert(enumerator.Current);
         }
 
         return session.TotalBytesRead;
@@ -34,6 +31,7 @@ class StreamOverEnumerable : StreamOverEnumerableBase
         {
             Interlocked.Exchange(ref _enumerator, null)?.Dispose();
         }
+        
         base.Dispose(disposing);
     }
 }
