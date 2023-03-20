@@ -20,8 +20,6 @@ Stream stream = enumerable.ToStream();
 * ToStream() supports encodings: `enumerable.ToStream(Encoding.UTF8);`
 * ToStream() accepts both `IEnumerable` and `IAsyncEnumerable`.
   If you use the async version, you will need to call `stream.ReadAsync()` rather than `Read()`.
-* ToStream() supports encodings: ```enumerable.ToStream(Encoding.UTF8);```
-* IAsyncEnumerable support (since Feb 2023)
 
 [nuget]: https://www.nuget.org/packages/EnumerableToStream/
 
