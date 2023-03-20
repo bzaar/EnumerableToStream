@@ -10,8 +10,8 @@ var enumerable = new [] {"Hello, ", "world!"};
 Stream s = enumerable.ToStream();
         </Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>1.2.1</Version>
-        <PackageReleaseNotes>Add README and license to the package</PackageReleaseNotes>
+        <Version>1.3.0</Version>
+        <PackageReleaseNotes>Add IAsyncEnumerable support</PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/bzaar/EnumerableToStream</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/bzaar/EnumerableToStream/blob/master/LICENSE</PackageLicenseUrl>
         <PackageTags>ienumerable;stream</PackageTags>
